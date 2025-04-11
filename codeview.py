@@ -4,13 +4,18 @@ import streamlit as st
 st.set_page_config(layout="wide", page_title="HTML Previewer")
 
 # Sidebar
-st.sidebar.title("Editor Options")
-st.sidebar.markdown("Customize your layout or add controls here.")
+st.sidebar.title("Sidebar")
+st.sidebar.markdown("Customize controls here...")
 
 # Page title
 st.markdown("""
-    <h1 style='text-align: center; color: #4CAF50; font-family: sans-serif;'>Live HTML Preview</h1>
+    <h1 style='text-align: center; color: #4CAF50; font-family: sans-serif; margin-bottom: 2rem;'>
+        Live HTML Output & Code Preview
+    </h1>
 """, unsafe_allow_html=True)
+
+# Toggle to show/hide code
+show_code = st.toggle("Show Code", value=True)
 
 # Sample HTML content
 html_content = """
@@ -24,47 +29,62 @@ html_content = """
 </div>
 """
 
-# Two-column layout
-left_col, right_col = st.columns(2, gap="large")
+# If code is shown, use two columns
+if show_code:
+    col1, col2 = st.columns(2, gap="large")
 
-# Left: HTML Output
-with left_col:
-    st.markdown(
-        """
+    # Left: Output
+    with col1:
+        st.markdown("""
+            <div style="
+                background-color: #ffffff;
+                border-radius: 12px;
+                padding: 25px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                border: 1px solid #e2e2e2;
+                margin-bottom: 20px;
+            ">
+                <h3 style="margin-top: 0; color: #333; font-family: sans-serif;">HTML Output</h3>
+        """, unsafe_allow_html=True)
+        st.components.v1.html(html_content, height=350, scrolling=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # Right: Code
+    with col2:
+        st.markdown("""
+            <div style="
+                background-color: #1e1e1e;
+                border-radius: 12px;
+                padding: 25px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                border: 1px solid #333;
+                margin-bottom: 20px;
+            ">
+                <h3 style="margin-top: 0; color: #90ee90; font-family: sans-serif;">HTML Code</h3>
+        """, unsafe_allow_html=True)
+        st.code(html_content, language='html')
+        st.markdown("</div>", unsafe_allow_html=True)
+
+# If code is hidden, output takes full width
+else:
+    st.markdown("""
         <div style="
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 20px;
             background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        ">
-            <h3 style="color: #333;">HTML Output</h3>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    st.components.v1.html(html_content, height=350, scrolling=True)
-
-# Right: Code View with Syntax Highlighting
-with right_col:
-    st.markdown(
-        """
-        <div style="
-            border: 1px solid #ddd;
             border-radius: 12px;
-            padding: 20px;
-            background-color: #1e1e1e;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e2e2e2;
+            margin-bottom: 20px;
         ">
-            <h3 style="color: #90ee90;">HTML Code</h3>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    st.code(html_content, language='html')
+            <h3 style="margin-top: 0; color: #333; font-family: sans-serif;">HTML Output</h3>
+    """, unsafe_allow_html=True)
+    st.components.v1.html(html_content, height=400, scrolling=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-# Optional Footer
+# Footer
 st.markdown("""
     <hr style="margin-top: 50px;">
-    <p style="text-align:center; color: gray; font-size: 14px;">Created with Streamlit - Styled like W3Schools Preview</p>
+    <p style="text-align:center; color: gray; font-size: 14px;">
+        Built with Streamlit • Inspired by W3Schools & CodePen
+    </p>
 """, unsafe_allow_html=True)
