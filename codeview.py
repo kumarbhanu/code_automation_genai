@@ -1,13 +1,13 @@
 import streamlit as st
 
-# Set page config
+# Set wide layout
 st.set_page_config(layout="wide", page_title="HTML Previewer")
 
 # Sidebar
 st.sidebar.title("Sidebar")
 st.sidebar.markdown("Customize your view")
 
-# Heading (with less bottom margin)
+# Page heading
 st.markdown("""
     <h2 style='text-align: center; color: #333; font-family: sans-serif; margin-bottom: 1rem;'>
         HTML Output & Code Preview
@@ -17,7 +17,7 @@ st.markdown("""
 # Toggle for Show/Hide Code
 show_code = st.toggle("Show Code", value=True)
 
-# HTML Content
+# HTML content to preview
 html_content = """
 <div style="padding: 20px; font-family: Arial;">
     <h1 style="color: teal;">Hello, World!</h1>
@@ -29,11 +29,10 @@ html_content = """
 </div>
 """
 
-# Layout with or without code
+# If show_code is True, show two-column layout
 if show_code:
-    col1, col2 = st.columns(2, gap="medium")
+    col1, col_sep, col2 = st.columns([5, 0.5, 5])
 
-    # Output Card
     with col1:
         st.markdown("""
             <div style="
@@ -42,13 +41,19 @@ if show_code:
                 padding: 20px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                 border: 1px solid #d0e4f7;
+                height: 100%;
             ">
                 <h4 style="margin-top: 0; font-family: sans-serif; color: #0a4d6b;">HTML Output</h4>
         """, unsafe_allow_html=True)
-        st.components.v1.html(html_content, height=350, scrolling=True)
+        st.components.v1.html(html_content, height=400, scrolling=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Code Card
+    # Vertical Separator
+    with col_sep:
+        st.markdown("""
+            <div style="height: 100%; border-left: 2px solid #ddd; margin-top: 30px;"></div>
+        """, unsafe_allow_html=True)
+
     with col2:
         st.markdown("""
             <div style="
@@ -57,11 +62,14 @@ if show_code:
                 padding: 20px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.15);
                 border: 1px solid #444;
+                height: 100%;
             ">
                 <h4 style="margin-top: 0; font-family: sans-serif; color: #90ee90;">HTML Code</h4>
         """, unsafe_allow_html=True)
         st.code(html_content, language="html")
         st.markdown("</div>", unsafe_allow_html=True)
+
+# Full width output when code is hidden
 else:
     st.markdown("""
         <div style="
